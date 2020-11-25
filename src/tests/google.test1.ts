@@ -39,6 +39,14 @@ describe('Registration Scenarios', () => {
     //expect(page.url()).toBe(page_loaded);
   });
 
+  test('Should be Page loaded2', async () => {
+    await page.goto(page_url);
+    await page.waitForLoadState("load");
+    const data = await page.screenshot({ path: './images/PageLoaded.jpg' });
+    await addAttach(data, "PageLoaded");
+    //expect(page.url()).toBe(page_loaded);
+  });
+
   test('Google', async () => {
   await page.goto(page_url);
       // Click input[aria-label="First name"]
