@@ -22,7 +22,7 @@ let phone = '9834614881';
 
 
 beforeAll(async () => {
-  browser = await chromium.launch({ headless: false, slowMo: 2000 });
+  browser = await chromium.launch({ headless: false, slowMo: 500 });
   context = await browser.newContext();
   page = await context.newPage();
 
@@ -54,7 +54,7 @@ describe('Registration Scenarios', () => {
     expect(page.url()).toBe(page_url);
   })
 
-  test('Should link redirected to create account page', async () => {
+  test('Create Account', async () => {
     var i = 2;
     // Navigate to create account
     await page.click(s_create_account_link);
@@ -70,8 +70,9 @@ describe('Registration Scenarios', () => {
     await page.fill(s_phone, phone);
     // hit the create account button
     await page.click(s_create_account_button);
-    // demo purpose added
-    await page.waitForTimeout(5000);
+    await page.waitForSelector('text="User pool client 2cjnno3ofslgtkf3ttttcpep8m does not exist."');
+    const data = await page.screenshot({ path: './images/CreateAccount.jpg' });
+    await addAttach(data, "Create Account");
   });
 
 });

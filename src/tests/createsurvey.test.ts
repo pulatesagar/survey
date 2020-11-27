@@ -93,8 +93,8 @@ describe('Create Survey Scenarios', () => {
     }
     // Click text="Submit"
     await page.click('text="Submit"');
-    await page.waitForSelector('text="eGain Survey 1"');
-    await page.waitForSelector('text="Active"');
+    // await page.waitForSelector('text="eGain Survey 1"');
+    // await page.waitForSelector('text="Active"');
     const createdsurvey = await page.textContent('//html/body/div/div/div[2]/table/tbody/tr/td[1]');
     console.log("Created survey is" + " " + createdsurvey);
     const surveystatus = await page.textContent('//html/body/div/div/div[2]/table/tbody/tr/td[5]');
