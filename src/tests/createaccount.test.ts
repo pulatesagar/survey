@@ -34,19 +34,9 @@ afterAll(async () => {
   await browser.close();
 });
 
-beforeEach(async () => {
-  //page = await context.newPage();
-});
-
-afterEach(async () => {
-  //await page.close();
-});
-
-
-
 describe('Registration Scenarios', () => {
 
-  test('Should be Page loaded', async () => {
+  test('Page load', async () => {
     await page.goto(page_url);
     await page.waitForLoadState("load");
     const data = await page.screenshot({ path: './images/PageLoaded.jpg' });

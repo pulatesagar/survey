@@ -12,8 +12,6 @@ let s_survey_status_value = 'Active';
 let s_survey_name = 'input[type="text"]';
 let s_survey_name_value = 'eGain Survey';
 let s_survey_expiry = 'input[type="date"]';
-//let s_survey_expiry_value = '2020-11-26'; hardcode
-var surveyDate = new Date();
 let s_survey_url = '//div[normalize-space(.)=\'Survey URL\']/div/input[normalize-space(@type)=\'text\']';
 let s_survey_url_value = 'https://www.egain.com/';
 let s_survey_from_email_address = '//div[normalize-space(.)=\'Survey From Email Address\']/div/input[normalize-space(@type)=\'text\']';
