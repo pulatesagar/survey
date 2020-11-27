@@ -2,32 +2,29 @@
 import { chromium, Browser, Page, BrowserContext } from 'playwright';
 const { addAttach } = require("jest-html-reporters/helper");
 
-// variables and selectors declaration
-let browser: Browser;
-let page: Page;
-let context: BrowserContext;
-let create_survey_page_url = 'http://survey-ui.s3-website-us-east-1.amazonaws.com/';
-let s_create_survey_button = 'text="Create New Survey"';
-let s_survey_status = '//*[@id="inlineRadio1"]';
-let s_survey_status_value = 'Active';
-let s_survey_name = 'input[type="text"]';
-let s_survey_name_value = 'eGain Survey';
-let s_survey_expiry = 'input[type="date"]';
-let s_survey_url = '//div[normalize-space(.)=\'Survey URL\']/div/input[normalize-space(@type)=\'text\']';
-let s_survey_url_value = 'https://www.egain.com/';
-let s_survey_from_email_address = '//div[normalize-space(.)=\'Survey From Email Address\']/div/input[normalize-space(@type)=\'text\']';
-let s_survey_from_email_address_value = 'sagarpulate@gmail.com';
-let s_survey_trigger_caseclosure = 'input[type="checkbox"]';
-let s_survey_trigger_activityclosure = '//div[normalize-space(.)=\'Activity Closure\']/input[normalize-space(@type)=\'checkbox\']';
-let s_survey_accessability_option = 'select[id="inputState"]';
-let s_survey_accessability_option_value = 'UserGroup';
+var browser: Browser, page: Page, context: BrowserContext;
+let createSurveyPageUrl = 'http://survey-ui.s3-website-us-east-1.amazonaws.com/';
+var createSurveyButton = 'text="Create New Survey"';
+var surveyStatus = '//*[@id="inlineRadio1"]';
+var surveyName = 'input[type="text"]';
+var surveyStatusValue = 'Active'
+var surveyNameValue = 'eGain Survey';
+var surveyExpiry = 'input[type="date"]';
+var surveyUrl = '//div[normalize-space(.)=\'Survey URL\']/div/input[normalize-space(@type)=\'text\']';
+var surveyUrlValue = 'https://www.egain.com/';
+var surveyFromEmailAddress = '//div[normalize-space(.)=\'Survey From Email Address\']/div/input[normalize-space(@type)=\'text\']';
+var surveyFromEmailAddressValue = 'sagarpulate@gmail.com';
+var surveyTriggerCaseClosure = 'input[type="checkbox"]';
+var surveyTriggerActivityClosure = '//div[normalize-space(.)=\'Activity Closure\']/input[normalize-space(@type)=\'checkbox\']';
+var surveyAccessabilityOption = 'select[id="inputState"]';
+var surveyAccessabilityOptionValue = 'UserGroup';
 
 // browser setup
 beforeAll(async () => {
   browser = await chromium.launch({ headless: false, slowMo:10});
   context = await browser.newContext();
   page = await context.newPage();
-  await page.goto(create_survey_page_url);
+  await page.goto(createSurveyPageUrl);
   
 });
 // object dispose
@@ -42,9 +39,9 @@ describe('Create Survey Scenarios', () => {
   test.each([[1], [2], [3], [4], [5]])
 
     ('Create Survey %i', async (a) => {
-    let month, day, finalSurveyDate;
-    var oldDate = new Date();
-    var surveyDate = new Date(oldDate.getFullYear(), oldDate.getMonth(), oldDate.getDate() + a);
+    let month, day, finalSurveyExpiryDate;
+    var currentDate = new Date();
+    var surveyDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + a);
     var mm = surveyDate.getMonth() + 1; // added 1 to get correct current month
     var dd = surveyDate.getDate(); // increment day's by 1
     var yyyy = surveyDate.getFullYear(); 
@@ -65,52 +62,64 @@ describe('Create Survey Scenarios', () => {
       month=mm.toString();
     }
 
-    finalSurveyDate = yyyy + "-" + mm + "-" + day;
+    finalSurveyExpiryDate = yyyy + "-" + mm + "-" + day;
     // Click on create survey button and navigate to survey form
-    await page.click(s_create_survey_button);
+    await page.click(createSurveyButton);
     // Select Active status
-    await page.check(s_survey_status);
+    await page.check(surveyStatus);
     // Enter Survey Name
-    await page.type(s_survey_name, s_survey_name_value + " " + a);
+    await page.type(surveyName, surveyNameValue + " " + a);
     // Fill Survey Expiry Date
-    await page.fill(s_survey_expiry, finalSurveyDate);
+    await page.fill(surveyExpiry, finalSurveyExpiryDate);
     // Enter Survey URL
-    await page.type(s_survey_url, s_survey_url_value);
+    await page.type(surveyUrl, surveyUrlValue);
     // Enter Survey From Email Address
-    await page.type(s_survey_from_email_address, s_survey_from_email_address_value);
+    await page.type(surveyFromEmailAddress, surveyFromEmailAddressValue);
     // Select Survey Trigger
-    await page.check(s_survey_trigger_caseclosure);
-    await page.check(s_survey_trigger_activityclosure);
+    await page.check(surveyTriggerCaseClosure);
+    await page.check(surveyTriggerActivityClosure);
     // Select different options from dropdown
     if(a < 4)
     {
-    await page.selectOption(s_survey_accessability_option, s_survey_accessability_option_value+a);
+    await page.selectOption(surveyAccessabilityOption, surveyAccessabilityOptionValue+a);
     }
     else
     {
-      s_survey_accessability_option_value = 'UserGroup1';
-      await page.selectOption(s_survey_accessability_option, s_survey_accessability_option_value);
+      surveyAccessabilityOptionValue = 'UserGroup1';
+      await page.selectOption(surveyAccessabilityOption, surveyAccessabilityOptionValue);
     }
+
     // Submit the form
     await page.click('text="Submit"');
+
     // page scraping for data verification for created survey name
-    const createdsurvey = await page.textContent('//html/body/div/div/div[2]/table/tbody/tr/td[1]');
+    const createdSurvey = await page.textContent('//html/body/div/div/div[2]/table/tbody/tr/td[1]');
+
     // demo purpose, print created survey name
-    console.log("Created survey is" + " " +createdsurvey); 
+    console.log("Created survey is:" + " " +createdSurvey); 
+
     // page scraping for data verification for selected survey status
-    const surveystatus = await page.textContent('//html/body/div/div/div[2]/table/tbody/tr/td[5]');
+    const surveyStatusCheck = await page.textContent('//html/body/div/div/div[2]/table/tbody/tr/td[5]');
+
     // demo purpose, print created survey status
-    console.log("Created survey status is" + " " +surveystatus);  
+    console.log("Created survey status is:" + " " +surveyStatusCheck);  
+
     // verify the created survey appears on page and are same value
-    expect(createdsurvey).toBe(s_survey_name_value + " " + a);
+    expect(createdSurvey).toBe(surveyNameValue + " " + a);
+
     // verify the selected survey status appears on page and are same value
-    expect(surveystatus).toBe(s_survey_status_value);
+    expect(surveyStatusCheck).toBe(surveyStatusValue);
+
     // take a screenshot of created survey
     const data = await page.screenshot({ path: './images/Survey.jpg'});
+
     // attach screenshot to report
     await addAttach(data, "Survey"+ " " +a);
+
     // demo purpose
     await page.waitForTimeout(1000) 
+
   });
+
 });
 
