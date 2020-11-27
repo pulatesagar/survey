@@ -9,6 +9,7 @@ Playwright end-to-end test automation, Using TypeScript, ts-jest, Jest and jest-
 
 - Open project in visual studio code
 - Open terminal
+- run below command in terminal
 
 ```bash
 npm test
