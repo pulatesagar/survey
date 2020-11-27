@@ -6,18 +6,21 @@ let browser: Browser;
 let page: Page;
 let context: BrowserContext;
 let page_url = 'https://master.d1htewdfqlz7ha.amplifyapp.com/';
-let s_create_account_link = 'text="Create account"';
-let s_create_account_button = 'text="Create Account"';
-let s_username = 'input[data-test="sign-up-username-input"]';
-let s_password = 'input[data-test="sign-up-password-input"]';
-let s_emailaddress = 'input[data-test="sign-up-email-input"]';
-let s_countrycode = 'select[id="country-dial-code-select"]';
-let s_phone = 'input[data-test="sign-up-phone-number-input"]';
-let username = 'sagarpulate1';
+let createAccountLink = 'text="Create account"';
+let createAccountButton = 'text="Create Account"';
+//selectors
+let selectorUserName = 'input[data-test="sign-up-username-input"]';
+let selectorPassword = 'input[data-test="sign-up-password-input"]';
+let selectorEmailAddress = 'input[data-test="sign-up-email-input"]';
+let selectorCountryCode = 'select[id="country-dial-code-select"]';
+let selectorPhone = 'input[data-test="sign-up-phone-number-input"]';
+// user data
+let username = 'sagarpulate';
 let password = 'egain@123';
-let emailaddress = 'sagarpulate@gmail.com' ;
-let countrycode= '+91';
+let emailAddress = 'sagarpulate@gmail.com' ;
+let countryCode= '+91';
 let phone = '9834614881';
+
 
 
 
@@ -47,22 +50,26 @@ describe('Registration Scenarios', () => {
   test('Create Account', async () => {
     var i = 2;
     // Navigate to create account
-    await page.click(s_create_account_link);
+    await page.click(createAccountLink);
     // Fill username
-    await page.fill(s_username, username);
+    await page.fill(selectorUserName, username);
     // Fill password
-    await page.fill(s_password, password);
+    await page.fill(selectorPassword, password);
     // Fill email
-    await page.fill(s_emailaddress, emailaddress);
+    await page.fill(selectorEmailAddress, emailAddress);
     // Country Code
-    await page.selectOption(s_countrycode, countrycode);
+    await page.selectOption(selectorCountryCode, countryCode);
     // Fill phone number
-    await page.fill(s_phone, phone);
+    await page.fill(selectorPhone, phone);
     // hit the create account button
-    await page.click(s_create_account_button);
+    await page.click(createAccountButton);
+    // checking error message
     await page.waitForSelector('text="User pool client 2cjnno3ofslgtkf3ttttcpep8m does not exist."');
+
     const data = await page.screenshot({ path: './images/CreateAccount.jpg' });
+
     await addAttach(data, "Create Account");
+
   });
 
 });
